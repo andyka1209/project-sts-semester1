@@ -1,0 +1,24 @@
+# ===== Backend (Node.js) =====
+back-end/node_modules/
+back-end/.env
+back-end/dist/
+back-end/build/
+back-end/.drizzle/
+*.log
+
+# ===== Frontend (Flutter) =====
+front-end/build/
+front-end/.dart_tool/
+front-end/.flutter-plugins
+front-end/.flutter-plugins-dependencies
+front-end/.packages
+front-end/pubspec.lock
+
+# ===== IDE =====
+.vscode/
+.idea/
+*.iml
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
