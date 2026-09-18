@@ -1,0 +1,7 @@
+import 'package:flutter/material.dart';
+import 'pages/login_page.dart';
+import 'pages/HomePage.dart';
+import 'pages/search_page.dart';
+import 'pages/profile_page.dart';
+import 'pages/notification_page.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';

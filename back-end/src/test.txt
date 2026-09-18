@@ -1,0 +1,134 @@
+Database: db_blog_app (Tempat menyimpan semua data blog)
+│
+├── Tabel: categories (Kategori Artikel)
+│   ├── id (Kunci Utama/Primary Key)
+│   ├── name (Nama kategori, contoh: "Teknologi")
+│   ├── slug (Nama kategori versi URL, contoh: "teknologi")
+│   └── created_at (Waktu kategori dibuat)
+│
+└── Tabel: posts (Artikel)
+    ├── id (Kunci Utama/Primary Key)
+    ├── title (Judul artikel)
+    ├── content (Isi artikel)
+    ├── image_url (Link gambar artikel)
+    ├── category_id (Kunci Tamu/Foreign Key → menunjuk ke categories.id)
+    ├── created_at (Waktu artikel dibuat)
+    └── updated_at (Waktu artikel terakhir diubah)
+
+Relasi: 
+1 Kategori → Banyak Artikel
+(1 category bisa punya banyak posts)
+
+
+Langkah 1: User mengisi form artikel
+   - Judul: "Belajar TypeScript"
+   - Isi: "TypeScript adalah..."
+   - Pilih Kategori: "Pemrograman" (id=2)
+   
+Langkah 2: Aplikasi kirim data ke server
+   POST /api/posts
+   Data: { title: "Belajar TypeScript", content: "...", category_id: 2 }
+   
+Langkah 3: Server terima data
+   - Controller cek validasi
+   - Apakah title diisi? ✅
+   - Apakah content diisi? ✅
+   - Apakah category_id diisi? ✅
+   - Apakah category_id=2 ada di tabel categories? ✅
+   
+Langkah 4: Simpan ke database
+   INSERT INTO posts (title, content, category_id) 
+   VALUES ('Belajar TypeScript', '...', 2)
+   
+Langkah 5: Database simpan data
+   Tabel posts bertambah 1 baris baru
+   id = 1 (otomatis)
+   
+Langkah 6: Server kirim response
+   Status: 201 Created
+   Pesan: "Post berhasil dibuat"
+
+
+
+   Langkah 1: User buka halaman daftar artikel
+   
+Langkah 2: Aplikasi minta data ke server
+   GET /api/posts
+   
+Langkah 3: Server ambil data dari database
+   SELECT p.*, c.name AS category_name
+   FROM posts p
+   LEFT JOIN categories c ON p.category_id = c.id
+   
+   Hasilnya:
+   ┌────┬──────────────────┬──────────────┬──────────────┐
+   │ id │ title            │ category_name│ content      │
+   ├────┼──────────────────┼──────────────┼──────────────┤
+   │ 1  │ Belajar TS       │ Pemrograman  │ ...          │
+   │ 2  │ Tren Teknologi   │ Teknologi    │ ...          │
+   └────┴──────────────────┴──────────────┴──────────────┘
+   
+Langkah 4: Server kirim data ke aplikasi
+   Status: 200 OK
+   Data: [daftar artikel]
+   
+Langkah 5: Aplikasi tampilkan daftar artikel
+
+
+
+Langkah 1: User klik tombol "Edit" pada artikel id=1
+   
+Langkah 2: Aplikasi ambil data artikel lama
+   GET /api/posts/1
+   
+Langkah 3: Server ambil dari database
+   SELECT * FROM posts WHERE id = 1
+   
+Langkah 4: Server kirim data artikel ke aplikasi
+   Status: 200 OK
+   Data: { id: 1, title: "Belajar TS", content: "...", category_id: 2 }
+   
+Langkah 5: User ubah judul
+   Judul baru: "Belajar TypeScript untuk Pemula"
+   
+Langkah 6: Aplikasi kirim data baru ke server
+   PUT /api/posts/1
+   Data: { title: "Belajar TypeScript untuk Pemula", content: "...", category_id: 2 }
+   
+Langkah 7: Server cek apakah post id=1 ada?
+   - Jika ADA → lanjut update
+   - Jika TIDAK ADA → kirim 404 Not Found
+   
+Langkah 8: Server update database
+   UPDATE posts 
+   SET title = 'Belajar TypeScript untuk Pemula' 
+   WHERE id = 1
+   
+Langkah 9: Server kirim response
+   Status: 200 OK
+   Pesan: "Post berhasil diupdate"
+
+
+   Langkah 1: User klik tombol "Hapus" pada artikel id=1
+   
+Langkah 2: Aplikasi konfirmasi ke user
+   "Yakin ingin menghapus artikel ini?"
+   
+Langkah 3: User konfirmasi "Ya"
+   
+Langkah 4: Aplikasi kirim permintaan hapus
+   DELETE /api/posts/1
+   
+Langkah 5: Server cek apakah post id=1 ada?
+   - Jika ADA → lanjut hapus
+   - Jika TIDAK ADA → kirim 404 Not Found
+   
+Langkah 6: Server hapus dari database
+   DELETE FROM posts WHERE id = 1
+   
+Langkah 7: Server kirim response
+   Status: 200 OK
+   Pesan: "Post berhasil dihapus"
+
+
+   
